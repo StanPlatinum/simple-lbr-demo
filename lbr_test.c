@@ -1,3 +1,9 @@
+#include "msr.h"
+//#define IA32_DEBUGCTLMSR_LBR        (1<<0)
+#define IA32_DEBUGCTLMSR_LBR		(1<<0) /* Last Branch Record */
+/*Skylake add*/
+#define MSR_LBR_SELECT              0x000001c8
+
 void lbr_enable(void *info) {
 	/*uint64_t debugctl;
 	unsigned long long select;
