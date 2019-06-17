@@ -7,8 +7,6 @@
 
 #include <sys/errno.h>
 
-#include <asm/cpufeature.h>
-
 #define rdmsr(msr,val1,val2) \
      __asm__ __volatile__("rdmsr" \
 			  : "=a" (val1), "=d" (val2) \
