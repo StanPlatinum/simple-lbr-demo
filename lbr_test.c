@@ -2,6 +2,7 @@
 #define IA32_DEBUGCTLMSR_LBR		(1<<0) /* Last Branch Record */
 /*Skylake add*/
 #define MSR_LBR_SELECT              0x000001c8
+#define SELECT_CONFIG               0x18D                   //110001101
 
 void lbr_enable(void *info) {
 	/*uint64_t debugctl;
