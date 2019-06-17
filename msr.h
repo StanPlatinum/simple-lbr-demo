@@ -102,6 +102,7 @@ static inline uint64_t rdtsc(void)
 			  : "=a" (low), "=d" (high) \
 			  : "c" (counter))
 
+#if 0
 static inline unsigned long __rdfsbase(void)
 {
     unsigned long base;
@@ -175,6 +176,7 @@ static inline void wrgsbase(unsigned long base)
     else
         wrmsrl(MSR_GS_BASE, base);
 }
+#endif
 
 #endif /* !__ASSEMBLY__ */
 
