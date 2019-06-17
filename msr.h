@@ -1,8 +1,6 @@
 #ifndef __ASM_MSR_H
 #define __ASM_MSR_H
 
-#include "msr-index.h"
-
 #ifndef __ASSEMBLY__
 
 #include <sys/types.h>
@@ -168,12 +166,6 @@ static inline void wrgsbase(unsigned long base)
     else
         wrmsrl(MSR_GS_BASE, base);
 }
-
-DECLARE_PER_CPU(u64, efer);
-u64 read_efer(void);
-void write_efer(u64 val);
-
-DECLARE_PER_CPU(u32, ler_msr);
 
 #endif /* !__ASSEMBLY__ */
 
