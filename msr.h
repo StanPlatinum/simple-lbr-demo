@@ -7,6 +7,13 @@
 #define X86_FEATURE_FSGSBASE	(7*32+ 0) /* {RD,WR}{FS,GS}BASE instructions */
 #define cpu_has_fsgsbase	boot_cpu_has(X86_FEATURE_FSGSBASE)
 
+
+#ifdef __ASSEMBLY__
+# define _ASM_EX(p) p-.
+#else
+# define _ASM_EX(p) #p "-."
+#endif
+
 /* Exception table entry */
 #ifdef __ASSEMBLY__
 # define _ASM__EXTABLE(sfx, from, to)             \
@@ -24,8 +31,10 @@
 
 #define _ASM_EXTABLE(from, to)     _ASM__EXTABLE(, from, to)
 
+
 #include <sys/types.h>
 #include <sys/errno.h>
+
 
 typedef unsigned long long __u64;
 typedef unsigned long long u64;
@@ -34,6 +43,7 @@ typedef unsigned long u32;
 
 typedef __u64 uint64_t;
 typedef __u32 uint32_t;
+
 
 #define rdmsr(msr,val1,val2) \
      __asm__ __volatile__("rdmsr" \
@@ -119,81 +129,6 @@ static inline uint64_t rdtsc(void)
 			  : "=a" (low), "=d" (high) \
 			  : "c" (counter))
 
-#if 0
-static inline unsigned long __rdfsbase(void)
-{
-    unsigned long base;
-
-#ifdef HAVE_GAS_FSGSBASE
-    asm volatile ( "rdfsbase %0" : "=r" (base) );
-#else
-    asm volatile ( ".byte 0xf3, 0x48, 0x0f, 0xae, 0xc0" : "=a" (base) );
-#endif
-
-    return base;
-}
-
-static inline unsigned long __rdgsbase(void)
-{
-    unsigned long base;
-
-#ifdef HAVE_GAS_FSGSBASE
-    asm volatile ( "rdgsbase %0" : "=r" (base) );
-#else
-    asm volatile ( ".byte 0xf3, 0x48, 0x0f, 0xae, 0xc8" : "=a" (base) );
-#endif
-
-    return base;
-}
-
-static inline unsigned long rdfsbase(void)
-{
-    unsigned long base;
-
-    if ( cpu_has_fsgsbase )
-        return __rdfsbase();
-
-    rdmsrl(MSR_FS_BASE, base);
-
-    return base;
-}
-
-static inline unsigned long rdgsbase(void)
-{
-    unsigned long base;
-
-    if ( cpu_has_fsgsbase )
-        return __rdgsbase();
-
-    rdmsrl(MSR_GS_BASE, base);
-
-    return base;
-}
-
-static inline void wrfsbase(unsigned long base)
-{
-    if ( cpu_has_fsgsbase )
-#ifdef HAVE_GAS_FSGSBASE
-        asm volatile ( "wrfsbase %0" :: "r" (base) );
-#else
-        asm volatile ( ".byte 0xf3, 0x48, 0x0f, 0xae, 0xd0" :: "a" (base) );
-#endif
-    else
-        wrmsrl(MSR_FS_BASE, base);
-}
-
-static inline void wrgsbase(unsigned long base)
-{
-    if ( cpu_has_fsgsbase )
-#ifdef HAVE_GAS_FSGSBASE
-        asm volatile ( "wrgsbase %0" :: "r" (base) );
-#else
-        asm volatile ( ".byte 0xf3, 0x48, 0x0f, 0xae, 0xd8" :: "a" (base) );
-#endif
-    else
-        wrmsrl(MSR_GS_BASE, base);
-}
-#endif
 
 #endif /* !__ASSEMBLY__ */
 
