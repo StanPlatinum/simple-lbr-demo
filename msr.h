@@ -3,8 +3,11 @@
 
 #ifndef __ASSEMBLY__
 
-#include <sys/types.h>
+/* Intel-defined CPU features, CPUID level 0x00000007:0 (ebx), word 7 */
+#define X86_FEATURE_FSGSBASE	(7*32+ 0) /* {RD,WR}{FS,GS}BASE instructions */
+#define cpu_has_fsgsbase	boot_cpu_has(X86_FEATURE_FSGSBASE)
 
+#include <sys/types.h>
 #include <sys/errno.h>
 
 typedef unsigned long long __u64;
