@@ -7,6 +7,23 @@
 #define X86_FEATURE_FSGSBASE	(7*32+ 0) /* {RD,WR}{FS,GS}BASE instructions */
 #define cpu_has_fsgsbase	boot_cpu_has(X86_FEATURE_FSGSBASE)
 
+/* Exception table entry */
+#ifdef __ASSEMBLY__
+# define _ASM__EXTABLE(sfx, from, to)             \
+    .section .ex_table##sfx, "a" ;                \
+    .balign 4 ;                                   \
+    .long _ASM_EX(from), _ASM_EX(to) ;            \
+    .previous
+#else
+# define _ASM__EXTABLE(sfx, from, to)             \
+    " .section .ex_table" #sfx ",\"a\"\n"         \
+    " .balign 4\n"                                \
+    " .long " _ASM_EX(from) ", " _ASM_EX(to) "\n" \
+    " .previous\n"
+#endif
+
+#define _ASM_EXTABLE(from, to)     _ASM__EXTABLE(, from, to)
+
 #include <sys/types.h>
 #include <sys/errno.h>
 
