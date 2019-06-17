@@ -7,6 +7,9 @@
 
 #include <sys/errno.h>
 
+
+typedef unsigned long long __u64;
+
 #define rdmsr(msr,val1,val2) \
      __asm__ __volatile__("rdmsr" \
 			  : "=a" (val1), "=d" (val2) \
